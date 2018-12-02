@@ -332,7 +332,7 @@
                 if (time < 12) {
                     // If the time is not on the hours
                     if (Math.floor(time) != time)
-                        timeText += Math.floor(time) + "" + (60 * (time - Math.floor(time))) + "am";
+                        timeText += Math.floor(time) + ":" + (60 * (time - Math.floor(time))) + "am";
                     else
                         timeText += time + "am";
                 }
@@ -346,7 +346,7 @@
 
                     // If the time is not on the hour
                     if (Math.floor(time) != time)
-                        timeText += Math.floor(time) + "" + (60 * (time - Math.floor(time))) + "pm";
+                        timeText += Math.floor(time) + ":" + (60 * (time - Math.floor(time))) + "pm";
                     // If the time is on the hour
                     else
                         timeText += time.toString() + "pm";
@@ -439,6 +439,25 @@
 
                 // Display food options that are open or closed
                 if (displayOptions.includes("Food")) {
+                    // Go through day ranges for True Grit's
+                    for (var dayRange in TRUE_GRITS) {
+                        if (dayRange.includes(currentDayName)) {
+                            locationTimeRange = TRUE_GRITS[dayRange];
+
+                            // Go through every single meal period that its open
+                            for (var timeRange in locationTimeRange) {
+                                var currentHour = new Date().getHours();
+                                var open = locationTimeRange[timeRange].open;
+                                var close = locationTimeRange[timeRange].close;
+                                
+                                // If it is the meal period
+                                if (currentHour > open && currentHour < close) {
+                                    addListItem("True Grit's (" + timeRange + ")", locationTimeRange[timeRange]);
+                                }
+                            }
+                        }
+                    }
+
                     // Go through every single restaurant
                     for (var restaurant in FOOD) {
                         var currentLocation = FOOD[restaurant];
@@ -450,7 +469,7 @@
                                 locationTimeRange = currentLocation[dayRange];
 
                         addListItem(restaurant, locationTimeRange);
-                    } 
+                    }
                 }
 
                 // Display offices that are open or closed
