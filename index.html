@@ -26,14 +26,14 @@
             <span style="display: inline">Show: </span>
             <div class="dropdown" style="display: inline">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Food + Buildings + Offices
+                    Food + Buildings + Other
                 </button>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item active" href="#">Food + Buildings + Offices</a>
+                  <a class="dropdown-item active" href="#">Food + Buildings + Other</a>
                   <a class="dropdown-item" href="#">Food</a>
                   <a class="dropdown-item" href="#">Buildings</a>
-                  <a class="dropdown-item" href="#">Offices</a>
+                  <a class="dropdown-item" href="#">Other</a>
                 </div>
             </div><br>
             <p style="margin-bottom: 10px;"></p>
@@ -129,6 +129,11 @@
                     "Saturday": {open: 12, close: 16},
                     "Sunday": {open: 13, close: 20}
                 },
+                // Source: https://studentaffairs.umbc.edu/files/2017/10/UMBC-Student-Affairs-Welcome-Guide.pdf
+                "Flat Tuesday's": {
+                    "Monday": {open: 20, close: 23.5},
+                    "Thursday, Friday": {open: 16, close: 23.5}
+                },
                 // Source: https://www.dineoncampus.com/UMBC/where-to-eat
                 "Hissho": {
                     "Monday, Tuesday, Wednesday, Thursday": {open: 11, close: 20},
@@ -211,7 +216,12 @@
             };
 
             // JSON of all the different offices on campus
-            var OFFICES = {
+            var OTHER = {
+                // Source: http://bookstore.umbc.edu/SiteText?id=52877#hours
+                "Bookstore": {
+                    "Monday, Tuesday, Wednesday, Thursday": {open: 8.5, close: 17},
+                    "Friday": {open: 8.5, close: 16}
+                },
                 // Source: https://campuscard.umbc.edu/
                 "Campus Card & Mailing Services": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16}
@@ -219,6 +229,14 @@
                 // Source: https://campuslife.umbc.edu/about/contact-information/
                 "Campus Life": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 9, close: 17}
+                },
+                // Source: https://studentaffairs.umbc.edu/departments/career-center/
+                "Career Center": {
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 17}
+                },
+                // Source: https://cadvc.umbc.edu/
+                "Center for Art Design and Visual Culture": {
+                    "Tuesday, Wednesday, Thursday, Friday, Saturday": {open: 10, close: 17}
                 },
                 // Source: https://campuslife.umbc.edu/about/contact-information/
                 "Commonvision": {
@@ -231,6 +249,10 @@
                 // Source: https://campuslife.umbc.edu/about/contact-information/
                 "Mosaic Center": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 10, close: 17}
+                },
+                // Source: https://studentaffairs.umbc.edu/departments/ocss/
+                "Off-Campus Student Services": {
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 17}
                 },
                 // Source: https://advising.umbc.edu/about-us/services/
                 "Office for Academic and Pre-Professional Advising": {
@@ -245,6 +267,10 @@
                 "Office of Health Promotion": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16.5}
                 },
+                // Source: https://studentaffairs.umbc.edu/departments/student-conduct/
+                "Office of Student Conduct and Community Standards": {
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 17},
+                },
                 // Source: https://sds.umbc.edu/contact-us/
                 "Office of Student Disablity Services": {
                     "Monday, Tuesday, Wednesday, Thursday": {open: 8.5, close: 17},
@@ -254,12 +280,20 @@
                 "Office of Undergraduate Admissions and Orientation": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16.5}
                 },
+                // Source: https://studentaffairs.umbc.edu/files/2017/10/UMBC-Student-Affairs-Welcome-Guide.pdf
+                "Parking Services": {
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 7.5, close: 15.5}
+                },
                 // Source: https://registrar.umbc.edu/contact/
                 "Registrar's Office": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16.5}
                 },
                 // Source: https://studentaffairs.umbc.edu/departments/residential-life/
                 "Residential Life": {
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16.5}
+                },
+                // Source: https://financialaid.umbc.edu/files/2015/06/15-16_Fall_Orientation_Parents.pdf
+                "Student Business Services": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16.5}
                 },
                 // Source: Shrijana Khanal
@@ -274,6 +308,11 @@
                 // Source: https://www.umbc.edu/uhs/
                 "University Health Services": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 17}
+                },
+                // Source: https://lrc.umbc.edu/tutor/writing-center/
+                "Writing Center": {
+                    "Monday, Tuesday, Wednesday, Thursday": {open: 10, close: 22},
+                    "Friday": {open: 10, close: 15}
                 }
             };
 
@@ -415,9 +454,9 @@
                 }
 
                 // Display offices that are open or closed
-                if (displayOptions.includes("Offices")) {
-                    for (var office in OFFICES) {
-                        var currentLocation = OFFICES[office];
+                if (displayOptions.includes("Other")) {
+                    for (var office in OTHER) {
+                        var currentLocation = OTHER[office];
 
                         var locationTimeRange = undefined;
                         for (var dayRange in currentLocation)
