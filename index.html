@@ -425,9 +425,13 @@
                     if (lastDayNum == -1) lastDayNum = 6;
 
                     var lastDay = getDayTimeRange(lastDayNum);
-                    if (currentHour > open) 
+                    if (lastDay != undefined && currentHour < lastDay.open)
+                        openDiv.appendChild(listItem);
+                    else if (currentHour > open) 
                         openDiv.appendChild(listItem);
                     else if (lastDay != undefined && currentHour > lastDay.close) 
+                        closedDiv.appendChild(listItem);
+                    else
                         closedDiv.appendChild(listItem);
                 }
                 // If it's a normal start and end time
@@ -435,14 +439,15 @@
                     var maxMins = 60 * (close - Math.floor(close));
                     
                     // If it is closed
-                    if (currentHour > close || currentHour == close && new Date().getMinutes() > maxMins) 
-                        closedDiv.appendChild(listItem);
-                    // If it is closing soon
-                    else if (currentHour - 1 == close)
-                        closingSoonDiv.appendChild(listItem);
+                    // if (currentHour > close || currentHour == close && new Date().getMinutes() > maxMins) 
+                    //     closedDiv.appendChild(listItem);
+                        
                     // If it is open
-                    else
+                    if (currentHour > open || currentHour == open && new Date().getMinutes() > maxMins 
+                        && currentHour < close)
                         openDiv.appendChild(listItem);
+                    else
+                        closedDiv.appendChild(listItem);
                 }
             }
 
@@ -507,7 +512,8 @@
                     for (var office in OTHER) {
                         var currentLocation = OTHER[office];
 
-                        var locationTimeRange = getDayTimeRange(dayNum, locationTimeRange);
+                        // Get today's open and closing time for the location
+                        var locationTimeRange = getDayTimeRange(dayNum, currentLocation);
 
                         addListItem(office, locationTimeRange);
                     }
