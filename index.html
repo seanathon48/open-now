@@ -355,6 +355,17 @@
                 return timeText;
             }
 
+            function getDayTimeRange(dayNum, currentLocation) {
+                var currentDayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayNum];
+                
+                var locationTimeRange = undefined;
+                for (var dayRange in currentLocation)
+                    if (dayRange.includes(currentDayName))
+                        locationTimeRange = currentLocation[dayRange];
+
+                return locationTimeRange;
+            }
+
             /* Add an item to the open or closed list. */
             function addListItem(title, timeRange) {
                 // Create list item element that will be added to a card
@@ -397,9 +408,14 @@
                 }
                 // If it is a late night end
                 else if (open > close) {
-                    if (currentHour > open) {
+                    var lastDayNum = new Date().getDay();
+                    if (lastDayNum == -1) lastDayNum = 6;
+
+                    var lastDay = getDayTimeRange(lastDayNum);
+                    if (currentHour > open) 
                         openDiv.appendChild(listItem);
-                    }
+                    else if (lastDay != undefined && currentHour > lastDay.close) 
+                        closedDiv.appendChild(listItem);
                 }
                 // If it's a normal start and end time
                 else {
@@ -424,7 +440,7 @@
                 closedDiv.innerHTML = "";
 
                 var displayOptions = document.getElementById("dropdownMenuButton").innerHTML;
-                var currentDayName = getDayName();
+                var dayNum = new Date().getDay();
 
                 // Display buildings that are open or closed
                 if (displayOptions.includes("Buildings")) {
@@ -433,10 +449,7 @@
                         var currentLocation = BUILDINGS[building];
 
                         // Get today's open and closing time for the location
-                        var locationTimeRange = undefined;
-                        for (var dayRange in currentLocation) 
-                            if (dayRange.includes(currentDayName)) 
-                                locationTimeRange = currentLocation[dayRange];
+                        var locationTimeRange = getDayTimeRange(dayNum, currentLocation)
 
                         addListItem(building, locationTimeRange);
                     }
@@ -444,6 +457,8 @@
 
                 // Display food options that are open or closed
                 if (displayOptions.includes("Food")) {
+                    var currentDayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date().getDay()];
+
                     // Go through day ranges for True Grit's
                     for (var dayRange in TRUE_GRITS) {
                         if (dayRange.includes(currentDayName)) {
@@ -468,10 +483,7 @@
                         var currentLocation = FOOD[restaurant];
 
                         // Get today's open and closing time for the location
-                        var locationTimeRange = undefined;
-                        for (var dayRange in currentLocation) 
-                            if (dayRange.includes(currentDayName)) 
-                                locationTimeRange = currentLocation[dayRange];
+                        var locationTimeRange = getDayTimeRange(dayNum, currentLocation);
 
                         addListItem(restaurant, locationTimeRange);
                     }
@@ -482,10 +494,7 @@
                     for (var office in OTHER) {
                         var currentLocation = OTHER[office];
 
-                        var locationTimeRange = undefined;
-                        for (var dayRange in currentLocation)
-                            if (dayRange.includes(currentDayName))
-                                locationTimeRange = currentLocation[dayRange];
+                        var locationTimeRange = getDayTimeRange(dayNum, locationTimeRange);
 
                         addListItem(office, locationTimeRange);
                     }
