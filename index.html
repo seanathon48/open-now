@@ -355,61 +355,66 @@
                 return timeText;
             }
 
+            /* Add an item to the open or closed list. */
             function addListItem(title, timeRange) {
-                    // Create list item element that will be added to a card
-                    var listItem = document.createElement("LI");
-                    listItem.className = "list-group-item";
+                // Create list item element that will be added to a card
+                var listItem = document.createElement("LI");
+                listItem.className = "list-group-item";
 
-                    // Create location name header for list item
-                    var locationNameHeading = document.createElement("H5");
-                    locationNameHeading.innerHTML = title;
-                    listItem.appendChild(locationNameHeading);
+                // Create location name header for list item
+                var locationNameHeading = document.createElement("H5");
+                locationNameHeading.innerHTML = title;
+                listItem.appendChild(locationNameHeading);
 
-                    // Store the open and close times in more easily accessible variable
-                    var open, close;
-                    if (timeRange) {
-                        open = timeRange.open;
-                        close = timeRange.close;
-                    }
-                    // If the place isn't open at all today
-                    else {
-                        open = "N/A";
-                        close = "N/A";
-                    }
+                // Store the open and close times in more easily accessible variable
+                var open, close;
+                if (timeRange) {
+                    open = timeRange.open;
+                    close = timeRange.close;
+                }
+                // If the place isn't open at all today
+                else {
+                    open = "N/A";
+                    close = "N/A";
+                }
 
-                    // Create time range text for list item
-                    var locationTimeRangeText = document.createElement("P");
-                    locationTimeRangeText.innerHTML = toTwelveHour(open) + " - " + toTwelveHour(close);
-                    listItem.appendChild(locationTimeRangeText);
+                // Create time range text for list item
+                var locationTimeRangeText = document.createElement("P");
+                locationTimeRangeText.innerHTML = toTwelveHour(open) + " - " + toTwelveHour(close);
+                listItem.appendChild(locationTimeRangeText);
                     
-                    // If the location isn't open at all today
-                    if (open == "N/A") {
-                        locationTimeRangeText.innerHTML = "Closed All Day";
-                        closedDiv.appendChild(listItem);
-                    }
-                    // If the location is open 24/7
-                    else if (open == 0) {
-                        locationTimeRangeText.innerHTML = "Open 24/7";
-                        openDiv.appendChild(listItem);
-                    }
-                    // If it is a late night end
-                    else if (open > close) {
-                        openDiv.appendChild(listItem);
-                    }
-                    // If it's a normal start and end time case
-                    else {
-                        var currentHour = new Date().getHours();
+                var currentHour = new Date().getHours();
 
-                        // If it is closed
-                        if (currentHour > close) 
-                            closedDiv.appendChild(listItem);
-                        // If it is closing soon
-                        else if (currentHour - 1 == close)
-                            closingSoonDiv.appendChild(listItem);
-                        // If it is open
-                        else
-                            openDiv.appendChild(listItem);
+                // If the location isn't open at all today
+                if (open == "N/A") {
+                    locationTimeRangeText.innerHTML = "Closed All Day";
+                    closedDiv.appendChild(listItem);
+                }
+                // If the location is open 24/7
+                else if (open == 0) {
+                    locationTimeRangeText.innerHTML = "Open 24/7";
+                    openDiv.appendChild(listItem);
+                }
+                // If it is a late night end
+                else if (open > close) {
+                    if (currentHour > open) {
+                        openDiv.appendChild(listItem);
                     }
+                }
+                // If it's a normal start and end time
+                else {
+                    var maxMins = 60 * (close - Math.floor(close));
+                    
+                    // If it is closed
+                    if (currentHour > close || currentHour == close && new Date().getMinutes() > maxMins) 
+                        closedDiv.appendChild(listItem);
+                    // If it is closing soon
+                    else if (currentHour - 1 == close)
+                        closingSoonDiv.appendChild(listItem);
+                    // If it is open
+                    else
+                        openDiv.appendChild(listItem);
+                }
             }
 
             /* Retrieve and display the open/closing times of all the buildings */
@@ -487,6 +492,7 @@
                 }
             }
 
+            /* Calculate and add to HTML the necessary components for the User Interface. */
             function loadUI() {
                 var currentHour = new Date().getHours();
                 
