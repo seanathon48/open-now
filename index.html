@@ -259,6 +259,10 @@
                 "Counseling Center": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 17}
                 },
+                // Source: Their door
+                "English Learning Institute": {
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 6.5}
+                },
                 // Source: https://campuslife.umbc.edu/about/contact-information/
                 "Mosaic Center": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 10, close: 17}
@@ -436,16 +440,14 @@
                 }
                 // If it's a normal start and end time
                 else {
-                    var maxMins = 60 * (close - Math.floor(close));
-                    
-                    // If it is closed
-                    // if (currentHour > close || currentHour == close && new Date().getMinutes() > maxMins) 
-                    //     closedDiv.appendChild(listItem);
+                    var openMins = 60 * (open - Math.floor(open));
+                    var closeMins = 60 * (close - Math.floor(close));
                         
                     // If it is open
-                    if (currentHour > open || currentHour == open && new Date().getMinutes() > maxMins 
-                        && currentHour < close)
+                    if (currentHour > open || currentHour == open && new Date().getMinutes() > openMins)
                         openDiv.appendChild(listItem);
+                    else if (currentHour == close && new Date().getMinutes() > closeMins || currentHour > close) 
+                        closedDiv.appendChild(listItem);
                     else
                         closedDiv.appendChild(listItem);
                 }
@@ -487,9 +489,12 @@
                                 var currentHour = new Date().getHours();
                                 var open = locationTimeRange[timeRange].open;
                                 var close = locationTimeRange[timeRange].close;
+
+                                var openMins = 60 * (open - Math.floor(open));
+                                var closeMins = 60 * (close - Math.floor(close));
                                 
                                 // If it is the meal period
-                                if (currentHour > open && currentHour < close) {
+                                if ( (currentHour > open || currentHour == open && new Date().getMinutes() > openMins) && (currentHour < close || currentHour == close && new Date().getMinutes() < closeMins) )  {
                                     addListItem("True Grit's (" + timeRange + ")", locationTimeRange[timeRange]);
                                 }
                             }
