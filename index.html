@@ -261,7 +261,7 @@
                 },
                 // Source: Their door
                 "English Learning Institute": {
-                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 6.5}
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 17.5}
                 },
                 // Source: https://campuslife.umbc.edu/about/contact-information/
                 "Mosaic Center": {
@@ -444,7 +444,7 @@
                     var closeMins = 60 * (close - Math.floor(close));
                         
                     // If it is open
-                    if (currentHour > open || currentHour == open && new Date().getMinutes() > openMins)
+                    if ( (currentHour > open || (currentHour == open && new Date().getMinutes() > openMins)) && currentHour < close)
                         openDiv.appendChild(listItem);
                     else if (currentHour == close && new Date().getMinutes() > closeMins || currentHour > close) 
                         closedDiv.appendChild(listItem);
