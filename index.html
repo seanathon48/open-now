@@ -280,9 +280,9 @@
                 "Office of Financial Aid and Scholarships": {
                     "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16.5}
                 },
-                // Source: I Guessed
+                // Source: Their door
                 "Office of Health Promotion": {
-                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16.5}
+                    "Monday, Tuesday, Wednesday, Thursday, Friday": {open: 8.5, close: 16}
                 },
                 // Source: https://studentaffairs.umbc.edu/departments/student-conduct/
                 "Office of Student Conduct and Community Standards": {
@@ -455,6 +455,9 @@
 
             /* Retrieve and display the open/closing times of all the buildings */
             function getTimes() {
+                // Update meal period jumbotron
+                getMealPeriod();
+
                 // Reset the divs
                 openDiv.innerHTML = "";
                 closedDiv.innerHTML = "";
@@ -525,8 +528,7 @@
                 }
             }
 
-            /* Calculate and add to HTML the necessary components for the User Interface. */
-            function loadUI() {
+            function getMealPeriod() {
                 var currentHour = new Date().getHours();
                 
                 // Get the current meal period
@@ -548,7 +550,10 @@
 
                 // Set meal period element to current meal period
                 document.getElementById("currentMealPeriod").innerHTML = currentMealPeriod;
+            }
 
+            /* Calculate and add to HTML the necessary components for the User Interface. */
+            function loadUI() {
                 // Get and display the times
                 getTimes();
 
