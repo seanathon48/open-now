@@ -425,7 +425,7 @@
                 }
                 // If it is a late night end
                 else if (open > close) {
-                    var lastDayNum = new Date().getDay();
+                    var lastDayNum = new Date().getDay() - 1;
                     if (lastDayNum == -1) lastDayNum = 6;
 
                     var lastDay = getDayTimeRange(lastDayNum);
